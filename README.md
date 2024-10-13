@@ -4,6 +4,8 @@
 
 ## 安装 GraphRAG 环境
 
+https://microsoft.github.io/graphrag/
+
 所需：
 
 - conda
@@ -15,6 +17,7 @@
 conda create -n graphrag-go python=3.12
 conda activate graphrag-go
 pip install graphrag
+pip install ollama
 ```
 
 ### 运行 ollama

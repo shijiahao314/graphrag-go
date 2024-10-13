@@ -10,3 +10,23 @@
 conda activate graphrag-go
 python -m graphrag.index --root ./raggo
 ```
+
+## 问答
+
+Local:
+
+```bash
+python -m graphrag.query \
+--root ./raggo \
+--method local \
+"Who is Scrooge, and what are his main relationships?"
+```
+
+Global:
+
+```bash
+python -m graphrag.query \
+--root ./raggo \
+--method global \
+"What are the top themes in this story?"
+```

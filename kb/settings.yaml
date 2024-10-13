@@ -18,9 +18,6 @@ llm:
   # max_retry_wait: 10.0
   # sleep_on_rate_limit_recommendation: true # whether to sleep when azure suggests wait-times
   concurrent_requests: 25 # the number of parallel inflight requests that may be made
-  # temperature: 0 # temperature for sampling
-  # top_p: 1 # top-p sampling
-  # n: 1 # Number of completions to generate
 
 parallelization:
   stagger: 0.3
@@ -31,9 +28,6 @@ async_mode: threaded # or asyncio
 embeddings:
   ## parallelization: override the global parallelization settings for embeddings
   async_mode: threaded # or asyncio
-  # target: required # or all
-  # batch_size: 16 # the number of documents to send in a single request
-  # batch_max_tokens: 8191 # the maximum number of tokens to send in a single request
   llm:
     api_key: ${GRAPHRAG_API_KEY}
     type: openai_embedding # or azure_openai_embedding
@@ -48,12 +42,17 @@ embeddings:
     # max_retry_wait: 10.0
     # sleep_on_rate_limit_recommendation: true # whether to sleep when azure suggests wait-times
     concurrent_requests: 25 # the number of parallel inflight requests that may be made
+    #batch_size: 1 # the number of documents to send in a single request
+    #batch_max_tokens: 4000 # the maximum number of tokens to send in a single request
+    # target: required # or optional
+  
+
 
 chunks:
-  size: 1200
-  overlap: 100
+  size: 512
+  overlap: 64
   group_by_columns: [id] # by default, we don't allow chunks to cross documents
-
+    
 input:
   type: file # or blob
   file_type: text # or csv
@@ -80,14 +79,12 @@ reporting:
   # container_name: <azure_blob_storage_container_name>
 
 entity_extraction:
-  ## strategy: fully override the entity extraction strategy.
-  ##   type: one of graph_intelligence, graph_intelligence_json and nltk
   ## llm: override the global llm settings for this task
   ## parallelization: override the global parallelization settings for this task
   ## async_mode: override the global async_mode settings for this task
   prompt: "prompts/entity_extraction.txt"
   entity_types: [organization,person,geo,event]
-  max_gleanings: 1
+  max_gleanings: 0
 
 summarize_descriptions:
   ## llm: override the global llm settings for this task
@@ -138,15 +135,9 @@ local_search:
   # conversation_history_max_turns: 5
   # top_k_mapped_entities: 10
   # top_k_relationships: 10
-  # llm_temperature: 0 # temperature for sampling
-  # llm_top_p: 1 # top-p sampling
-  # llm_n: 1 # Number of completions to generate
   # max_tokens: 12000
 
 global_search:
-  # llm_temperature: 0 # temperature for sampling
-  # llm_top_p: 1 # top-p sampling
-  # llm_n: 1 # Number of completions to generate
   # max_tokens: 12000
   # data_max_tokens: 12000
   # map_max_tokens: 1000
