@@ -27,18 +27,18 @@ pip show graphrag | grep Location
 输出结果类似
 
 ```text
-/home/shijiahao/miniconda3/lib/python3.12/site-packages
+Location: /home/shijiahao/miniconda3/envs/graphrag-go/lib/python3.12/site-packages
 ```
 
 替换文件（确保在本文件所在目录执行）
 
 ```bash
 # 设置环境变量
-export PACKAGE_PATH="/home/shijiahao/miniconda3/lib/python3.12/site-packages/graphrag"
+export PACKAGE_PATH="/home/shijiahao/miniconda3/envs/graphrag-go/lib/python3.12/site-packages"
 # 替换文件
-cp ./openai_embeddings_llm.py $PACKAGE_PATH/llm/openai/openai_embeddings_llm.py
-cp ./embedding.py $PACKAGE_PATH/query/llm/oai/embedding.py
-cp ./text_utils.py $PACKAGE_PATH/query/llm/text_utils.py
+cp ./openai_embeddings_llm.py $PACKAGE_PATH/graphrag/llm/openai/openai_embeddings_llm.py
+cp ./embedding.py $PACKAGE_PATH/graphrag/query/llm/oai/embedding.py
+cp ./text_utils.py $PACKAGE_PATH/graphrag/query/llm/text_utils.py
 # 解除环境变量
 unset PACKAGE_PATH
 ```
