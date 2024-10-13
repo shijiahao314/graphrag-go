@@ -30,3 +30,15 @@ python -m graphrag.query \
 --method global \
 "What are the top themes in this story?"
 ```
+
+## 问题
+
+### `ValueError: Columns must be same length as key`
+
+修改 `settings.yaml` 中的 `chunks` 大小：
+
+```yaml
+chunks:
+  size: 512
+  overlap: 64
+```
