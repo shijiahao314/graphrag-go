@@ -80,7 +80,6 @@ func (ka *KBApi) IndexingKB(c *gin.Context) {
 
 	defer lock.Unlock() // 释放锁
 
-	// cmd := exec.CommandContext(c, global.PythonPath, "--version")
 	cmd := exec.CommandContext(c, global.PythonPath,
 		"-m", "graphrag.index",
 		"--root", path)
@@ -100,9 +99,9 @@ func (ka *KBApi) IndexingKB(c *gin.Context) {
 	}
 
 	// 设置流式响应的头部
-	c.Header("Content-Type", "text/plain")
-	c.Header("Transfer-Encoding", "chunked")
-	c.Status(http.StatusOK)
+	// c.Header("Content-Type", "text/plain")
+	// c.Header("Transfer-Encoding", "chunked")
+	// c.Status(http.StatusOK)
 
 	// 创建一个 bufio 读取器用于逐行读取命令输出
 	reader := bufio.NewReader(stdout)
