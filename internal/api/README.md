@@ -8,6 +8,14 @@
 curl localhost:8080/api/kb
 ```
 
+### add
+
+```bash
+curl -X POST localhost:8080/api/kb/add \
+  -H "Content-Type: application/json" \
+  -d '{"name": "santi"}'
+```
+
 ### indexing
 
 ```bash
@@ -19,6 +27,8 @@ curl -X POST localhost:8080/api/kb/indexing \
 ## query
 
 ### ask
+
+local: 
 
 ```bash
 python -m graphrag.query \
@@ -33,4 +43,12 @@ python -m graphrag.query \
 curl -X POST localhost:8080/api/query \
   -H "Content-Type: application/json" \
   -d '{"kb": "raggo", "timestamp": "20241015-132435", "method": "local", "text": "What are the top themes in this story?"}'
+```
+
+global:
+
+```bash
+curl -X POST localhost:8080/api/query \
+  -H "Content-Type: application/json" \
+  -d '{"kb": "raggo", "timestamp": "20241015-132435", "method": "global", "text": "Who is Scrooge, and what are his main relationships?"}'
 ```

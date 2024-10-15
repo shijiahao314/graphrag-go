@@ -22,6 +22,7 @@ func init() {
 	}
 
 	global.WorkDir = dir
+	global.ExampleSettingFile = fmt.Sprintf("%s/%s/settings-example.yaml", dir, global.KBDir)
 
 	// PythonPath
 	envName := "graphrag-go"

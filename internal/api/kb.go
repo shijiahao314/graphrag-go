@@ -6,6 +6,7 @@ import (
 	"graphraggo/internal/global"
 	"graphraggo/internal/kb"
 	"net/http"
+	"os"
 	"os/exec"
 	"sync"
 
@@ -19,7 +20,59 @@ func (ka *KBApi) Register(rg *gin.RouterGroup) {
 	r := rg.Group("/kb")
 
 	r.GET("", ka.GetKB)
-	r.POST("indexing", ka.IndexingKB)
+	r.POST("/add", ka.AddKB)
+	r.POST("/indexing", ka.IndexingKB)
+}
+
+// AddKB 新建知识库
+func (ka *KBApi) AddKB(c *gin.Context) {
+	type AddKBReq struct {
+		Name string `json:"name"`
+	}
+	type AddKBRsp struct {
+		BaseRsp
+	}
+
+	req := AddKBReq{}
+	rsp := AddKBRsp{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusBadRequest, rsp)
+		return
+	}
+
+	// 判断文件夹是否存在
+	path := fmt.Sprintf("%s/%s/%s", global.WorkDir, global.KBDir, req.Name)
+	_, err := os.Stat(path)
+	if err == nil {
+		// 存在
+		rsp.Code = -1
+		rsp.Msg = fmt.Sprintf("kb '%s' already exists", req.Name)
+		c.JSON(http.StatusInternalServerError, rsp)
+		return
+	}
+
+	if !os.IsNotExist(err) {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusInternalServerError, rsp)
+		return
+	}
+
+	os.Mkdir(path, os.ModePerm)
+	os.Mkdir(path+"/input", os.ModePerm)
+	cmd := exec.Command("cp", global.ExampleSettingFile, path+"/settings.yaml")
+	if err := cmd.Run(); err != nil {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusInternalServerError, rsp)
+		return
+	}
+
+	rsp.Code = 0
+	rsp.Msg = "success"
+	c.JSON(http.StatusOK, rsp)
 }
 
 // GetKB 获取可用知识库

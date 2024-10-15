@@ -26,6 +26,7 @@ const (
 	Global Method = "global"
 )
 
+// Query 提供查询能力
 func (qa *QueryApi) Query(c *gin.Context) {
 	type QueryReq struct {
 		KB        string `json:"kb"`

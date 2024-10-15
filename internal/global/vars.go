@@ -5,6 +5,7 @@ const (
 )
 
 var (
-	WorkDir    string
-	PythonPath string // Conda 环境下 Python 路径
+	WorkDir            string
+	PythonPath         string // Conda 环境下 Python 路径
+	ExampleSettingFile string
 )
