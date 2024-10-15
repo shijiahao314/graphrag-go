@@ -14,9 +14,7 @@ type KB struct {
 	Name string `json:"name,omitempty"`
 }
 
-// ReadKB wd/kb 文件夹下所有的文件夹
-//
-//	wd: 工作目录
+// ReadKB 获取所有知识库
 func ReadKB() ([]*KB, error) {
 	path := fmt.Sprintf("%s/%s", global.WorkDir, global.KBDir)
 

@@ -2,18 +2,26 @@
 
 ## kb
 
-### get
-
-```bash
-curl localhost:8080/api/kb
-```
-
 ### add
 
 ```bash
 curl -X POST localhost:8080/api/kb/add \
   -H "Content-Type: application/json" \
   -d '{"name": "santi"}'
+```
+
+### delete
+
+```bash
+curl -X POST localhost:8080/api/kb/delete \
+  -H "Content-Type: application/json" \
+  -d '{"name": "santi"}'
+```
+
+### get
+
+```bash
+curl localhost:8080/api/kb
 ```
 
 ### indexing
