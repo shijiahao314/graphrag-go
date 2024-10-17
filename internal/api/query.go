@@ -29,14 +29,14 @@ const (
 // Query 提供查询能力
 func (qa *QueryApi) Query(c *gin.Context) {
 	type QueryReq struct {
-		KB        string `json:"kb"`
-		Timestamp string `json:"timestamp"`
-		Method    Method `json:"method"`
-		Text      string `json:"text"`
+		KB     string `json:"kb"`
+		DB     string `json:"db"`
+		Method Method `json:"method"`
+		Text   string `json:"text"`
 	}
 	type QueryRsp struct {
 		BaseRsp
-		Text string `jons:"text"`
+		Text string `json:"text"`
 	}
 
 	req := QueryReq{}
@@ -50,7 +50,14 @@ func (qa *QueryApi) Query(c *gin.Context) {
 
 	path := fmt.Sprintf("%s/%s/%s", global.WorkDir, global.KBDir, req.KB)
 	config := fmt.Sprintf("%s/%s", path, "settings.yaml")
-	data := fmt.Sprintf("%s/output/%s/artifacts", path, req.Timestamp)
+	data := fmt.Sprintf("%s/output/%s/artifacts", path, req.DB)
+
+	rsp.Code = 0
+	rsp.Msg = "success"
+	// mock reply
+	rsp.Text = "I'm sorry, but I don't have any data tables to ass…ables so that I can generate a helpful response.\n"
+	c.JSON(http.StatusOK, rsp)
+	return
 
 	cmd := exec.CommandContext(c, global.PythonPath,
 		"-m", "graphrag.query",
