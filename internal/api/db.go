@@ -13,7 +13,7 @@ type DataApi struct {
 }
 
 func (da *DataApi) Register(rg *gin.RouterGroup) {
-	r := rg.Group("/data")
+	r := rg.Group("/db")
 
 	r.POST("", da.GetData)
 	r.POST("/delete", da.DeleteData)
@@ -45,7 +45,7 @@ func (da *DataApi) DeleteData(c *gin.Context) {
 	if err != nil {
 		// 不存在
 		rsp.Code = -1
-		rsp.Msg = fmt.Sprintf("data '%s' not exists", req.Name)
+		rsp.Msg = fmt.Sprintf("db '%s' not exists", req.Name)
 		c.JSON(http.StatusInternalServerError, rsp)
 		return
 	}
@@ -88,7 +88,7 @@ func (da *DataApi) GetData(c *gin.Context) {
 	}
 	type GetDataRsp struct {
 		BaseRsp
-		Datas []string `json:"datas"`
+		DBs []string `json:"dbs"`
 	}
 
 	req := GetDataReq{}
@@ -111,6 +111,6 @@ func (da *DataApi) GetData(c *gin.Context) {
 
 	rsp.Code = 0
 	rsp.Msg = "success"
-	rsp.Datas = datas
+	rsp.DBs = datas
 	c.JSON(http.StatusOK, rsp)
 }
