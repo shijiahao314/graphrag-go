@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"graphraggo/internal/global"
-	"graphraggo/internal/kb"
 	"net/http"
 	"os"
 	"os/exec"
@@ -117,18 +116,37 @@ func (ka *KBApi) DeleteKB(c *gin.Context) {
 	c.JSON(http.StatusOK, rsp)
 }
 
+// ReadKB 获取所有知识库
+func ReadKB() ([]string, error) {
+	path := fmt.Sprintf("%s/%s", global.WorkDir, global.KBDir)
+
+	files, err := os.ReadDir(path)
+	if err != nil {
+		return nil, err
+	}
+
+	kbs := []string{}
+	for _, file := range files {
+		if file.Type().IsDir() {
+			kbs = append(kbs, file.Name())
+		}
+	}
+
+	return kbs, nil
+}
+
 // GetKB 获取可用知识库
 func (ka *KBApi) GetKB(c *gin.Context) {
 	type GetKBReq struct {
 	}
 	type GetKBRsp struct {
 		BaseRsp
-		KBs []*kb.KB `json:"kbs"`
+		KBs []string `json:"kbs"`
 	}
 
 	rsp := GetKBRsp{}
 
-	kbs, err := kb.ReadKB()
+	kbs, err := ReadKB()
 	if err != nil {
 		rsp.Code = -1
 		rsp.Msg = err.Error()

@@ -35,6 +35,7 @@ func MustInitRouter() *gin.Engine {
 
 	routers := []IRouter{
 		&api.KBApi{},
+		&api.DataApi{},
 		&api.QueryApi{},
 	}
 	for _, rt := range routers {

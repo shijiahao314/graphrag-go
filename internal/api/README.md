@@ -32,6 +32,24 @@ curl -X POST localhost:8080/api/kb/indexing \
   -d '{"name": "raggo"}'
 ```
 
+## data
+
+### get
+
+```bash
+curl -X POST localhost:8080/api/data \
+  -H "Content-Type: application/json" \
+  -d '{"kb": "raggo"}'
+```
+
+### delete
+
+```bash
+curl -X POST localhost:8080/api/data/delete \
+  -H "Content-Type: application/json" \
+  -d '{"kb": "raggo", "name": "20241015-132915"}'
+```
+
 ## query
 
 ### ask
