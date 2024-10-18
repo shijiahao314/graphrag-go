@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"graphraggo/internal/global"
+	"log/slog"
 	"net/http"
 	"os/exec"
 	"strings"
@@ -52,23 +53,24 @@ func (qa *QueryApi) Query(c *gin.Context) {
 	config := fmt.Sprintf("%s/%s", path, "settings.yaml")
 	data := fmt.Sprintf("%s/output/%s/artifacts", path, req.DB)
 
-	rsp.Code = 0
-	rsp.Msg = "success"
 	// mock reply
-	rsp.Text = "I'm sorry, but I don't have any data tables to ass…ables so that I can generate a helpful response.\n"
-	c.JSON(http.StatusOK, rsp)
-	return
+	// rsp.Code = 0
+	// rsp.Msg = "success"
+	// rsp.Text = "I'm sorry, but I don't have any data tables to ass…ables so that I can generate a helpful response.\n"
+	// c.JSON(http.StatusOK, rsp)
+	// return
 
 	cmd := exec.CommandContext(c, global.PythonPath,
 		"-m", "graphrag.query",
 		"--config", config,
 		"--data", data,
 		"--method", string(req.Method),
-		"--response_type", "Single Paragraph",
-		req.Text)
+		"--response_type", "'Single Paragraph'",
+		fmt.Sprintf("'%s'", req.Text))
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
+		slog.Error(err.Error(), slog.String("cmd", cmd.String()))
 		rsp.Code = -1
 		rsp.Msg = err.Error()
 		c.JSON(http.StatusInternalServerError, rsp)
