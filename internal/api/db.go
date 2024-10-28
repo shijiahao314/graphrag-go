@@ -16,6 +16,7 @@ func (da *DataApi) Register(rg *gin.RouterGroup) {
 	r := rg.Group("/db")
 
 	r.POST("", da.GetData)
+	r.POST("/output", da.GetOutput)
 	r.POST("/delete", da.DeleteData)
 }
 
@@ -112,5 +113,61 @@ func (da *DataApi) GetData(c *gin.Context) {
 	rsp.Code = 0
 	rsp.Msg = "success"
 	rsp.DBs = datas
+	c.JSON(http.StatusOK, rsp)
+}
+
+// ReadOutput 获取所有 Output
+func ReadOutput(kb, db string) ([]string, error) {
+	path := fmt.Sprintf("%s/%s/%s/output/%s/artifacts",
+		global.WorkDir, global.KBDir, kb, db)
+
+	files, err := os.ReadDir(path)
+	if err != nil {
+		return nil, err
+	}
+
+	outputs := []string{}
+	for _, file := range files {
+		if file.Type().IsDir() {
+			continue
+		}
+		outputs = append(outputs, file.Name())
+	}
+
+	return outputs, nil
+}
+
+// GetOutput 获取输出文件
+func (da *DataApi) GetOutput(c *gin.Context) {
+	type GetDataReq struct {
+		KB string `json:"kb"`
+		DB string `json:"db"`
+	}
+	type GetDataRsp struct {
+		BaseRsp
+		Files []string `json:"files"`
+	}
+
+	req := GetDataReq{}
+	rsp := GetDataRsp{}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusBadRequest, rsp)
+		return
+	}
+
+	files, err := ReadOutput(req.KB, req.DB)
+	if err != nil {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusInternalServerError, rsp)
+		return
+	}
+
+	rsp.Code = 0
+	rsp.Msg = "success"
+	rsp.Files = files
 	c.JSON(http.StatusOK, rsp)
 }

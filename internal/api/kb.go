@@ -19,6 +19,7 @@ func (ka *KBApi) Register(rg *gin.RouterGroup) {
 	r := rg.Group("/kb")
 
 	r.GET("", ka.GetKB)
+	r.POST("/input", ka.GetInput)
 	r.POST("/add", ka.AddKB)
 	r.POST("/delete", ka.DeleteKB)
 	r.POST("/indexing", ka.IndexingKB)
@@ -238,5 +239,60 @@ func (ka *KBApi) IndexingKB(c *gin.Context) {
 
 	rsp.Code = 0
 	rsp.Msg = "success"
+	c.JSON(http.StatusOK, rsp)
+}
+
+// ReadInput 获取所有 Input
+func ReadInput(kb string) ([]string, error) {
+	path := fmt.Sprintf("%s/%s/%s/input",
+		global.WorkDir, global.KBDir, kb)
+
+	files, err := os.ReadDir(path)
+	if err != nil {
+		return nil, err
+	}
+
+	outputs := []string{}
+	for _, file := range files {
+		if file.Type().IsDir() {
+			continue
+		}
+		outputs = append(outputs, file.Name())
+	}
+
+	return outputs, nil
+}
+
+// GetInput 获取输入文件
+func (da *KBApi) GetInput(c *gin.Context) {
+	type GetDataReq struct {
+		KB string `json:"kb"`
+	}
+	type GetDataRsp struct {
+		BaseRsp
+		Files []string `json:"files"`
+	}
+
+	req := GetDataReq{}
+	rsp := GetDataRsp{}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusBadRequest, rsp)
+		return
+	}
+
+	files, err := ReadInput(req.KB)
+	if err != nil {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusInternalServerError, rsp)
+		return
+	}
+
+	rsp.Code = 0
+	rsp.Msg = "success"
+	rsp.Files = files
 	c.JSON(http.StatusOK, rsp)
 }
