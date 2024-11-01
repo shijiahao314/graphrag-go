@@ -21,7 +21,6 @@ conda activate <env_name>
 
 ```bash
 pip show graphrag | grep Location
-
 ```
 
 输出结果类似

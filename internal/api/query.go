@@ -50,7 +50,7 @@ func (qa *QueryApi) Query(c *gin.Context) {
 	}
 
 	path := fmt.Sprintf("%s/%s/%s", global.WorkDir, global.KBDir, req.KB)
-	config := fmt.Sprintf("%s/%s", path, "settings.yaml")
+	config := fmt.Sprintf("%s/settings.yaml", path)
 	data := fmt.Sprintf("%s/output/%s/artifacts", path, req.DB)
 
 	// mock reply

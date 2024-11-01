@@ -52,26 +52,35 @@ curl -X POST localhost:8080/api/data/delete \
 
 ## query
 
-### ask
+### local
 
-local: 
+需要使用绝对路径
 
 ```bash
 python -m graphrag.query \
---config ./kb/raggo/settings.yaml \
---data ./kb/raggo/output/20241015-132435/artifacts \
+--config $(pwd)/kb/raggo/settings.yaml \
+--data $(pwd)/kb/raggo/output/20241015-132435/artifacts \
 --method local \
 --response_type "Single Paragraph" \
-"What are the top themes in this story?"
+"Who is Scrooge and what are his main relationships?"
 ```
 
 ```bash
 curl -X POST localhost:8080/api/query \
   -H "Content-Type: application/json" \
-  -d '{"kb": "raggo", "timestamp": "20241015-132435", "method": "local", "text": "What are the top themes in this story?"}'
+  -d '{"kb": "raggo", "timestamp": "20241015-132435", "method": "local", "text": "Who is Scrooge and what are his main relationships?"}'
 ```
 
-global:
+### global
+
+```bash
+python -m graphrag.query \
+--config $(pwd)/kb/raggo/settings.yaml \
+--data $(pwd)/kb/raggo/output/20241015-132435/artifacts \
+--method global \
+--response_type "Single Paragraph" \
+"What are the top themes in this story?"
+```
 
 ```bash
 curl -X POST localhost:8080/api/query \
