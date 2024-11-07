@@ -11,7 +11,13 @@ conda activate graphrag-go
 python -m graphrag.index --root ./raggo
 ```
 
-## 问答
+## 索引 - index
+
+```bash
+python -m graphrag.index --root ./raggo
+```
+
+## 问答 - 
 
 Local:
 

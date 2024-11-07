@@ -18,6 +18,7 @@ func (da *DataApi) Register(rg *gin.RouterGroup) {
 	r.POST("", da.GetData)
 	r.POST("/output", da.GetOutput)
 	r.POST("/delete", da.DeleteData)
+	r.POST("/logs", da.GetLogs)
 }
 
 // DeleteData 删除知识库
@@ -169,5 +170,54 @@ func (da *DataApi) GetOutput(c *gin.Context) {
 	rsp.Code = 0
 	rsp.Msg = "success"
 	rsp.Files = files
+	c.JSON(http.StatusOK, rsp)
+}
+
+// ReadLogs 获取日志文件内容
+func ReadLogs(kb, db string) ([]byte, error) {
+	filename := "indexing-engine.log"
+	logFilePath := fmt.Sprintf("%s/%s/%s/output/%s/reports/%s",
+		global.WorkDir, global.KBDir, kb, db, filename)
+
+	files, err := os.ReadFile(logFilePath)
+	if err != nil {
+		return nil, err
+	}
+
+	return files, nil
+}
+
+// GetLogs 获取日志文件
+func (da *DataApi) GetLogs(c *gin.Context) {
+	type GetDataReq struct {
+		KB string `json:"kb"`
+		DB string `json:"db"`
+	}
+	type GetDataRsp struct {
+		BaseRsp
+		Files string `json:"files"`
+	}
+
+	req := GetDataReq{}
+	rsp := GetDataRsp{}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusBadRequest, rsp)
+		return
+	}
+
+	files, err := ReadLogs(req.KB, req.DB)
+	if err != nil {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusInternalServerError, rsp)
+		return
+	}
+
+	rsp.Code = 0
+	rsp.Msg = "success"
+	rsp.Files = string(files)
 	c.JSON(http.StatusOK, rsp)
 }

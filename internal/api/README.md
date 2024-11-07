@@ -32,12 +32,12 @@ curl -X POST localhost:8080/api/kb/indexing \
   -d '{"name": "raggo"}'
 ```
 
-## data
+## db
 
 ### get
 
 ```bash
-curl -X POST localhost:8080/api/data \
+curl -X POST localhost:8080/api/db \
   -H "Content-Type: application/json" \
   -d '{"kb": "raggo"}'
 ```
@@ -45,9 +45,18 @@ curl -X POST localhost:8080/api/data \
 ### delete
 
 ```bash
-curl -X POST localhost:8080/api/data/delete \
+# dont use it easily
+curl -X POST localhost:8080/api/db/delete \
   -H "Content-Type: application/json" \
-  -d '{"kb": "raggo", "name": "20241015-132915"}'
+  -d '{"kb": "raggo", "name": "yyyyMMdd-hhmmss"}'
+```
+
+### logs
+
+```bash
+curl -X POST localhost:8080/api/db/logs \
+  -H "Content-Type: application/json" \
+  -d '{"kb": "raggo", "db": "yyyyMMdd-hhmmss"}'
 ```
 
 ## query
@@ -59,7 +68,7 @@ curl -X POST localhost:8080/api/data/delete \
 ```bash
 python -m graphrag.query \
 --config $(pwd)/kb/raggo/settings.yaml \
---data $(pwd)/kb/raggo/output/20241015-132435/artifacts \
+--data $(pwd)/kb/raggo/output/yyyyMMdd-hhmmss/artifacts \
 --method local \
 --response_type "Single Paragraph" \
 "Who is Scrooge and what are his main relationships?"
@@ -68,7 +77,7 @@ python -m graphrag.query \
 ```bash
 curl -X POST localhost:8080/api/query \
   -H "Content-Type: application/json" \
-  -d '{"kb": "raggo", "timestamp": "20241015-132435", "method": "local", "text": "Who is Scrooge and what are his main relationships?"}'
+  -d '{"kb": "raggo", "timestamp": "yyyyMMdd-hhmmss", "method": "local", "text": "Who is Scrooge and what are his main relationships?"}'
 ```
 
 ### global
@@ -76,7 +85,7 @@ curl -X POST localhost:8080/api/query \
 ```bash
 python -m graphrag.query \
 --config $(pwd)/kb/raggo/settings.yaml \
---data $(pwd)/kb/raggo/output/20241015-132435/artifacts \
+--data $(pwd)/kb/raggo/output/yyyyMMdd-hhmmss/artifacts \
 --method global \
 --response_type "Single Paragraph" \
 "What are the top themes in this story?"
@@ -85,5 +94,5 @@ python -m graphrag.query \
 ```bash
 curl -X POST localhost:8080/api/query \
   -H "Content-Type: application/json" \
-  -d '{"kb": "raggo", "timestamp": "20241015-132435", "method": "global", "text": "Who is Scrooge, and what are his main relationships?"}'
+  -d '{"kb": "raggo", "timestamp": "yyyyMMdd-hhmmss", "method": "global", "text": "Who is Scrooge, and what are his main relationships?"}'
 ```
