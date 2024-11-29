@@ -4,42 +4,42 @@
 
 本文件夹默认自带一个官方实例知识库 `ragtest` 和一个修改了配置的知识库 `raggo`
 
-## 运行
+## 激活 conda 环境
 
 ```bash
 conda activate graphrag-go
-python -m graphrag.index --root ./raggo
+graphrag init --root ./ragtest
 ```
 
-## 索引 - index
+## 建立知识库索引（Index）
 
 ```bash
-python -m graphrag.index --root ./raggo
+graphrag index --root ./raggo
 ```
 
-## 问答 - 
+## 问答（Query）
 
-Local:
+### Local
 
 ```bash
-python -m graphrag.query \
+graphrag query \
 --root ./raggo \
 --method local \
-"Who is Scrooge, and what are his main relationships?"
+--query "Who is Scrooge, and what are his main relationships?"
 ```
 
-Global:
+### Global
 
 ```bash
-python -m graphrag.query \
+graphrag query \
 --root ./raggo \
 --method global \
-"What are the top themes in this story?"
+--query "What are the top themes in this story?"
 ```
 
-## 问题
+## 常见问题
 
-### `ValueError: Columns must be same length as key`
+### ValueError: Columns must be same length as key
 
 修改 `settings.yaml` 中的 `chunks` 大小：
 
