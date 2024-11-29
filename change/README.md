@@ -36,7 +36,7 @@ export PACKAGE_PATH="/home/shijiahao/miniconda3/envs/graphrag-go/lib/python3.12/
 # 替换文件
 cp ./openai_embeddings_llm.py $PACKAGE_PATH/graphrag/llm/openai/openai_embeddings_llm.py
 cp ./embedding.py $PACKAGE_PATH/graphrag/query/llm/oai/embedding.py
-cp ./text_utils.py $PACKAGE_PATH/graphrag/query/llm/text_utils.py
+# cp ./text_utils.py $PACKAGE_PATH/graphrag/query/llm/text_utils.py
 # 解除环境变量
 unset PACKAGE_PATH
 ```

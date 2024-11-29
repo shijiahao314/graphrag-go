@@ -18,6 +18,7 @@ from tenacity import (
     wait_exponential_jitter,
 )
 
+from graphrag.logging.base import StatusLogger
 from graphrag.query.llm.base import BaseTextEmbedding
 from graphrag.query.llm.oai.base import OpenAILLMImpl
 from graphrag.query.llm.oai.typing import (
@@ -25,7 +26,6 @@ from graphrag.query.llm.oai.typing import (
     OpenaiApiType,
 )
 from graphrag.query.llm.text_utils import chunk_text
-from graphrag.query.progress import StatusReporter
 
 
 class OpenAIEmbedding(BaseTextEmbedding, OpenAILLMImpl):
@@ -46,7 +46,7 @@ class OpenAIEmbedding(BaseTextEmbedding, OpenAILLMImpl):
         max_retries: int = 10,
         request_timeout: float = 180.0,
         retry_error_types: tuple[type[BaseException]] = OPENAI_RETRY_ERROR_TYPES,  # type: ignore
-        reporter: StatusReporter | None = None,
+        reporter: StatusLogger | None = None,
     ):
         OpenAILLMImpl.__init__(
             self=self,
@@ -108,9 +108,9 @@ class OpenAIEmbedding(BaseTextEmbedding, OpenAILLMImpl):
         )
         chunk_embeddings = []
         chunk_lens = []
-        embedding_results = await asyncio.gather(*[
-            self._aembed_with_retry(chunk, **kwargs) for chunk in token_chunks
-        ])
+        embedding_results = await asyncio.gather(
+            *[self._aembed_with_retry(chunk, **kwargs) for chunk in token_chunks]
+        )
         embedding_results = [result for result in embedding_results if result[0]]
         chunk_embeddings = [result[0] for result in embedding_results]
         chunk_lens = [result[1] for result in embedding_results]
