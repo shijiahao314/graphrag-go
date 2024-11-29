@@ -2,7 +2,7 @@
 
 使用 Go 提供 GraphRAG API 服务
 
-## 1.安装 GraphRAG 环境
+## 1.安装 GraphRAG（0.5.0） 环境
 
 官方网站：[GraphRAG](https://microsoft.github.io/graphrag/)
 
@@ -14,6 +14,7 @@
 ### 创建 conda 环境
 
 ```bash
+# conda env remove -n graphrag-go
 conda create -n graphrag-go python=3.12 -y
 conda activate graphrag-go
 pip install graphrag
