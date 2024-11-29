@@ -8,7 +8,6 @@
 
 ```bash
 conda activate graphrag-go
-graphrag init --root ./ragtest
 ```
 
 ## 建立知识库索引（Index）
