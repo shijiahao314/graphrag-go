@@ -33,7 +33,7 @@ embeddings:
   llm:
     api_key: ${GRAPHRAG_API_KEY}
     type: openai_embedding # or azure_openai_embedding
-    model: nomic-embed-text:latest
+    model: nomic-embed-text:latest # embedding 模型只能使用该模型，否则需要对应修改 graphrag 包中多处源码
     api_base: http://localhost:11434/v1
     # api_version: 2024-02-15-preview
     # audience: "https://cognitiveservices.azure.com/.default"
