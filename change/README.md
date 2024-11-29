@@ -14,7 +14,6 @@ Python 安装包 graphrag 中需要修改的文件
 
 ```bash
 conda activate <env_name>
-
 ```
 
 查看 graphrag 路径位置
