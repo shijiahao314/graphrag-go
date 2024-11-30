@@ -22,7 +22,7 @@ func (ka *KBApi) Register(rg *gin.RouterGroup) {
 	r.POST("/input", ka.GetInput)
 	r.POST("/add", ka.AddKB)
 	r.POST("/delete", ka.DeleteKB)
-	r.POST("/indexing", ka.IndexingKB)
+	r.POST("/indexing", ka.IndexKB)
 }
 
 // AddKB 新建知识库
@@ -163,8 +163,8 @@ func (ka *KBApi) GetKB(c *gin.Context) {
 
 var lock sync.Mutex
 
-// IndexingKB 建立索引
-func (ka *KBApi) IndexingKB(c *gin.Context) {
+// IndexKB 建立索引
+func (ka *KBApi) IndexKB(c *gin.Context) {
 	type IndexingKBReq struct {
 		Name string `json:"name"`
 	}
@@ -195,7 +195,7 @@ func (ka *KBApi) IndexingKB(c *gin.Context) {
 	defer lock.Unlock() // 释放锁
 
 	cmd := exec.CommandContext(c, global.PythonPath,
-		"-m", "graphrag.index",
+		"-m", "graphrag index",
 		"--root", path)
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {

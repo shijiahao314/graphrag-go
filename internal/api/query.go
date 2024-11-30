@@ -61,7 +61,7 @@ func (qa *QueryApi) Query(c *gin.Context) {
 	// return
 
 	cmd := exec.CommandContext(c, global.PythonPath,
-		"-m", "graphrag.query",
+		"-m", "graphrag query",
 		"--config", config,
 		"--data", data,
 		"--method", string(req.Method),
