@@ -31,10 +31,6 @@ class OpenAIEmbeddingsLLM(BaseLLM[EmbeddingInput, EmbeddingOutput]):
     async def _execute_llm(
         self, input: EmbeddingInput, **kwargs: Unpack[LLMInput]
     ) -> EmbeddingOutput | None:
-        args = {
-            "model": self.configuration.model,
-            **(kwargs.get("model_parameters") or {}),
-        }
         embedding_list = []
         for inp in input:
             embedding = ollama.embeddings(model="nomic-embed-text", prompt=inp)
