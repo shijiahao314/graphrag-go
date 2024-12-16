@@ -94,6 +94,13 @@ func (ka *KBApi) DeleteKB(c *gin.Context) {
 		return
 	}
 
+	if req.Name == "" {
+		rsp.Code = -1
+		rsp.Msg = "kb name is empty"
+		c.JSON(http.StatusBadRequest, rsp)
+		return
+	}
+
 	// 判断文件夹是否存在
 	path := fmt.Sprintf("%s/%s/%s", global.WorkDir, global.KBDir, req.Name)
 	_, err := os.Stat(path)
