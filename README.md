@@ -17,7 +17,7 @@
 # conda env remove -n graphrag-go
 conda create -n graphrag-go python=3.12 -y
 conda activate graphrag-go
-pip install graphrag
+pip install graphrag==0.5.0
 pip install ollama
 ```
 

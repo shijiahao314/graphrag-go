@@ -50,7 +50,7 @@ input:
   file_pattern: ".*\\.txt$"
 
 chunks:
-  size: 300
+  size: 1200
   overlap: 100
   group_by_columns: [id]
 
