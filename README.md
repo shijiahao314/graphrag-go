@@ -6,11 +6,6 @@
 
 官方网站：[GraphRAG](https://microsoft.github.io/graphrag/)
 
-### 依赖
-
-- conda
-- ollama
-
 ### 创建 conda 环境
 
 ```bash
@@ -21,18 +16,7 @@ pip install graphrag==0.5.0
 pip install ollama
 ```
 
-### 拉取 ollama 镜像
-
-```bash
-# 确保 ollama 处于服务中
-ollama -v
-# 拉取 llm 模型
-ollama pull llama3.1
-# 拉取 embedding 模型
-ollama pull nomic-embed-text
-```
-
-## ~~2.修改本地 conda 环境 graphrrag 包源代码~~
+## 2.修改本地 conda 环境 graphrrag 包源代码
 
 参考 [change/README.md](./change/README.md)
 

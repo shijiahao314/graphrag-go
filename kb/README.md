@@ -4,15 +4,13 @@
 
 本文件夹默认自带一个官方实例知识库 `ragtest` 和一个修改了配置的知识库 `raggo`
 
-## 激活 conda 环境
-
-```bash
-conda activate graphrag-go
-```
-
 ## 建立知识库索引（Index）
 
 ```bash
+# 激活 Conda 环境
+conda activate graphrag-go
+
+# 建立索引
 graphrag index --root ./raggo
 ```
 
@@ -40,7 +38,9 @@ graphrag query \
 
 ### ValueError: Columns must be same length as key
 
-修改 `settings.yaml` 中的 `chunks` 大小：
+原因可能是 Embedding 模型不支持过长的 `chunk size`
+
+缩小 `settings.yaml` 中的 `chunks` 大小：
 
 ```yaml
 chunks:
