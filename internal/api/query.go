@@ -20,20 +20,20 @@ func (qa *QueryApi) Register(rg *gin.RouterGroup) {
 	r.POST("", qa.Query)
 }
 
-type Method string
+type QueryMethod string
 
 const (
-	Local  Method = "local"
-	Global Method = "global"
+	Local  QueryMethod = "local"
+	Global QueryMethod = "global"
 )
 
 // Query 提供查询能力
 func (qa *QueryApi) Query(c *gin.Context) {
 	type QueryReq struct {
-		KB     string `json:"kb"`
-		DB     string `json:"db"`
-		Method Method `json:"method"`
-		Text   string `json:"text"`
+		KB     string      `json:"kb"`
+		DB     string      `json:"db"`
+		Method QueryMethod `json:"method"`
+		Text   string      `json:"text"`
 	}
 	type QueryRsp struct {
 		BaseRsp
@@ -51,7 +51,7 @@ func (qa *QueryApi) Query(c *gin.Context) {
 
 	path := fmt.Sprintf("%s/%s/%s", global.WorkDir, global.KBDir, req.KB)
 	config := fmt.Sprintf("%s/settings.yaml", path)
-	data := fmt.Sprintf("%s/output/%s/artifacts", path, req.DB)
+	data := fmt.Sprintf("%s/output/%s", path, req.DB)
 
 	// mock reply
 	// rsp.Code = 0
@@ -62,11 +62,12 @@ func (qa *QueryApi) Query(c *gin.Context) {
 
 	cmd := exec.CommandContext(c, global.PythonPath,
 		"-m", "graphrag query",
+		"--method", string(req.Method),
+		"--query", fmt.Sprintf("'%s'", req.Text),
 		"--config", config,
 		"--data", data,
-		"--method", string(req.Method),
 		"--response-type", "'Single Paragraph'",
-		fmt.Sprintf("'%s'", req.Text))
+	)
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
