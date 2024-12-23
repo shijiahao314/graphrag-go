@@ -65,7 +65,7 @@ func (qa *QueryApi) Query(c *gin.Context) {
 		"--config", config,
 		"--data", data,
 		"--method", string(req.Method),
-		"--response_type", "'Single Paragraph'",
+		"--response-type", "'Single Paragraph'",
 		fmt.Sprintf("'%s'", req.Text))
 
 	out, err := cmd.CombinedOutput()
