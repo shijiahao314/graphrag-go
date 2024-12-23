@@ -61,12 +61,12 @@ func (qa *QueryApi) Query(c *gin.Context) {
 	// return
 
 	cmd := exec.CommandContext(c, global.PythonPath,
-		"-m", "graphrag query",
+		"-m", "graphrag", "query",
 		"--method", string(req.Method),
-		"--query", fmt.Sprintf("'%s'", req.Text),
+		"--query", req.Text,
 		"--config", config,
 		"--data", data,
-		"--response-type", "'Single Paragraph'",
+		"--response-type", "Single Paragraph",
 	)
 
 	out, err := cmd.CombinedOutput()
