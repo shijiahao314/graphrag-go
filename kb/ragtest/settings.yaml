@@ -68,7 +68,7 @@ reporting:
 
 storage:
   type: file # or blob
-  base_dir: "output"
+  base_dir: "output/${timestamp}"
 
 ## only turn this on if running `graphrag index` with custom settings
 ## we normally use `graphrag update` with the defaults
