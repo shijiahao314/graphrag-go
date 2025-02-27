@@ -22,7 +22,10 @@ func init() {
 	}
 
 	global.WorkDir = dir
+	fmt.Printf("WorkDir: %s\n", global.WorkDir)
+
 	global.ExampleSettingFile = fmt.Sprintf("%s/%s/settings-example.yaml", dir, global.KBDir)
+	fmt.Printf("ExampleSettingFile: %s\n", global.ExampleSettingFile)
 
 	// PythonPath
 	envName := "graphrag-go"
@@ -33,6 +36,7 @@ func init() {
 	}
 
 	global.PythonPath = strings.TrimRight(string(out), "\n")
+	fmt.Printf("PythonPath: %s\n", global.PythonPath)
 }
 
 func main() {
