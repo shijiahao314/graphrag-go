@@ -3,3 +3,4 @@ logs
 output
 lancedb
 .env
+.DS_Store
