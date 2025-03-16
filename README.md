@@ -14,6 +14,8 @@ conda create -n graphrag-go python=3.12 -y
 conda activate graphrag-go
 pip install graphrag==0.5.0
 pip install ollama
+# python ner server
+pip install hanlp, fastapi, uvicorn
 ```
 
 ## 2.修改本地 conda 环境 graphrrag 包源代码
