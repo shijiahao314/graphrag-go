@@ -31,10 +31,11 @@ type NERRsp struct {
 }
 
 func (na *NERApi) NER(c *gin.Context) {
-
 	req := NERReq{}
 	rsp := NERRsp{}
+
 	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("request invalid", slog.String("error", err.Error()))
 		rsp.Code = -1
 		rsp.Msg = err.Error()
 		c.JSON(http.StatusBadRequest, rsp)
@@ -44,10 +45,14 @@ func (na *NERApi) NER(c *gin.Context) {
 	// 调用 NER 服务
 	result, err := callNERService(req.Text)
 	if err != nil {
-		slog.Error("decode error", slog.String("error", err.Error()))
-		c.JSON(http.StatusInternalServerError, gin.H{"code": -1, "msg": err.Error()})
+		slog.Error("call service error", slog.String("error", err.Error()))
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusInternalServerError, rsp)
 		return
 	}
+
+	fmt.Println(result)
 
 	// 返回结果
 	c.JSON(http.StatusOK, result)
@@ -91,6 +96,8 @@ func callNERService(text string) (*NERRsp, error) {
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, fmt.Errorf("failed to decode response body: %w", err)
 	}
+
+	fmt.Println(result.Text)
 
 	return &result, nil
 }

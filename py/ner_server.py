@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import hanlp
 import uvicorn
+import json
 
 
 # 加载模型（只加载一次）
@@ -29,7 +30,8 @@ class NERRsp(BaseRsp):
 @app.post("/ner", response_model=NERRsp)
 async def ner(req: NERReq):
     result = HanLP(req.text, tasks="ner").to_pretty()
-    return NERRsp(code=0, msg="success", text=result)
+    result_json = json.dumps(result, ensure_ascii=False)
+    return NERRsp(code=0, msg="success", text=result_json)
 
 
 if __name__ == "__main__":

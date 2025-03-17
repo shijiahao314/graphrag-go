@@ -8,6 +8,12 @@ curl -X POST localhost:8080/api/ner \
   -d '{"text": "2021年HanLPv2.1为生产环境带来次世代最先进的多语种NLP技术。阿婆主来到北京立方庭参观自然语义科技公司。"}'
 ```
 
+```bash
+curl 'http://127.0.0.1:8081/ner' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{"text":"萨哈夫说，伊拉克将同联合国销毁伊拉克大规模杀伤性武器特别委员会继续保持合作。"}'
+```
+
 ## kb
 
 ### add
