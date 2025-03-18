@@ -12,27 +12,31 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type NERApi struct {
+type KGCApi struct {
 }
 
-func (na *NERApi) Register(rg *gin.RouterGroup) {
-	r := rg.Group("/ner")
+func (na *KGCApi) Register(rg *gin.RouterGroup) {
+	r := rg.Group("/kgc")
 
-	r.POST("", na.NER)
+	r.POST("", na.KGC)
 }
 
-type NERReq struct {
-	Text string `json:"text"`
+type KGCReq struct {
+	Head     string `json:"head"`
+	Relation string `json:"relation"`
+	Tail     string `json:"tail"`
 }
 
-type NERRsp struct {
+type KGCRsp struct {
 	BaseRsp
-	Text string `json:"text"`
+	Head     string `json:"head"`
+	Relation string `json:"relation"`
+	Tail     string `json:"tail"`
 }
 
-func (na *NERApi) NER(c *gin.Context) {
-	req := NERReq{}
-	rsp := NERRsp{}
+func (na *KGCApi) KGC(c *gin.Context) {
+	req := KGCReq{}
+	rsp := KGCRsp{}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		slog.Error("request invalid", slog.String("error", err.Error()))
@@ -42,10 +46,10 @@ func (na *NERApi) NER(c *gin.Context) {
 		return
 	}
 
-	// 调用 NER 服务
-	result, err := callNERService(req.Text)
+	// 调用 KGC 服务
+	result, err := callKGCService(req.Head, req.Relation, req.Tail)
 	if err != nil {
-		slog.Error("call ner service error", slog.String("error", err.Error()))
+		slog.Error("call kgc service error", slog.String("error", err.Error()))
 		rsp.Code = -1
 		rsp.Msg = err.Error()
 		c.JSON(http.StatusInternalServerError, rsp)
@@ -58,11 +62,11 @@ func (na *NERApi) NER(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func callNERService(text string) (*NERRsp, error) {
-	url := fmt.Sprintf("http://%s:%d/ner", global.Host, global.PythonServerPort)
+func callKGCService(head, relation, tail string) (*KGCRsp, error) {
+	url := fmt.Sprintf("http://%s:%d/kgc", global.Host, global.PythonServerPort)
 
 	// 构造请求体
-	reqBody, err := json.Marshal(NERReq{Text: text})
+	reqBody, err := json.Marshal(KGCReq{Head: head, Relation: relation, Tail: tail})
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request body: %w", err)
 	}
@@ -92,7 +96,7 @@ func callNERService(text string) (*NERRsp, error) {
 	}
 
 	// 解析 JSON 响应
-	var result NERRsp
+	var result KGCRsp
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, fmt.Errorf("failed to decode response body: %w", err)
 	}

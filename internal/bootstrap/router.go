@@ -40,6 +40,7 @@ func MustInitRouter() *gin.Engine {
 
 	routers := []IRouter{
 		&api.NERApi{},
+		&api.KGCApi{},
 		&api.KBApi{},
 		&api.DataApi{},
 		&api.QueryApi{},
@@ -53,7 +54,7 @@ func MustInitRouter() *gin.Engine {
 
 // MustInitPythonServer 启动Python服务
 func MustInitPythonServer() {
-	nerServer := fmt.Sprintf("%s/%s", global.WorkDir, "/py/ner_server.py")
+	nerServer := fmt.Sprintf("%s/%s", global.WorkDir, "/py/py_server.py")
 
 	cmd := exec.Command(global.PythonPath, nerServer,
 		"--host", global.Host,

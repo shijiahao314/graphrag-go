@@ -14,13 +14,13 @@ HanLP = hanlp.load(
 app = FastAPI()
 
 
-class NERReq(BaseModel):
-    text: str
-
-
 class BaseRsp(BaseModel):
     code: int
     msg: str
+
+
+class NERReq(BaseModel):
+    text: str
 
 
 class NERRsp(BaseRsp):
@@ -32,6 +32,23 @@ async def ner(req: NERReq):
     result = HanLP(req.text, tasks="ner").to_pretty()
     result_json = json.dumps(result, ensure_ascii=False)
     return NERRsp(code=0, msg="success", text=result_json)
+
+
+class KGCReq(BaseModel):
+    head: str
+    relation: str
+    tail: str
+
+
+class KGCRsp(BaseRsp):
+    head: str
+    relation: str
+    tail: str
+
+
+@app.post("/kgc", response_model=KGCRsp)
+async def kgc(req: KGCReq):
+    pass
 
 
 if __name__ == "__main__":
