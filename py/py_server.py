@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import hanlp
 import uvicorn
 import json
+from typing import Tuple
 
 
 # 加载模型（只加载一次）
@@ -46,9 +47,15 @@ class KGCRsp(BaseRsp):
     tail: str
 
 
+# TODO: impl kgc
+def KGCModel(head: str, relation: str, tail: str) -> Tuple[str, str, str]:
+    return head + "a", relation + "b", tail + "c"
+
+
 @app.post("/kgc", response_model=KGCRsp)
 async def kgc(req: KGCReq):
-    pass
+    head, relation, tail = KGCModel(req.head, req.relation, req.tail)
+    return KGCRsp(code=0, msg="success", head=head, relation=relation, tail=tail)
 
 
 if __name__ == "__main__":
