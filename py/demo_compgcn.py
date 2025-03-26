@@ -39,7 +39,7 @@ class InductiveLPDataset(DisjointInductivePathDataset):
 import logging
 import os
 
-os.chdir(r"/home/hsh/ME/kg_complet/ilpc2022")
+os.chdir(r"/Users/shijiahao/proj/graphrag-go/py")
 from pathlib import Path
 import torch
 from pykeen.evaluation import RankBasedEvaluator

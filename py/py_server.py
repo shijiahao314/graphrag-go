@@ -47,9 +47,12 @@ class KGCRsp(BaseRsp):
     tail: str
 
 
-# TODO: impl kgc
+from kgc import model, dataset, infer_tail_entity
+
+
+# KGC
 def KGCModel(head: str, relation: str, tail: str) -> Tuple[str, str, str]:
-    return head + "a", relation + "b", tail + "c"
+    return infer_tail_entity(model, dataset, head, relation, tail)
 
 
 @app.post("/kgc", response_model=KGCRsp)

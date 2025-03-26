@@ -14,6 +14,20 @@ curl 'http://127.0.0.1:8081/ner' \
   --data-raw '{"text":"萨哈夫说，伊拉克将同联合国销毁伊拉克大规模杀伤性武器特别委员会继续保持合作。"}'
 ```
 
+## KGC
+
+```bash
+curl -X POST localhost:8080/api/kgc \
+  -H "Content-Type: application/json" \
+  -d '{"head": "Q999726", "relation": "P101", "tail": ""}'
+```
+
+```bash
+curl -X POST localhost:8080/api/kgc \
+  -H "Content-Type: application/json" \
+  -d '{"head": "", "relation": "P101", "tail": "Q223117"}'
+```
+
 ## kb
 
 ### add

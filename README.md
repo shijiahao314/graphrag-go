@@ -16,6 +16,7 @@ pip install graphrag==0.5.0
 pip install ollama
 # python ner server
 pip install hanlp, fastapi, uvicorn
+pip install pykeen, wandb
 ```
 
 ## 2.修改本地 conda 环境 graphrrag 包源代码
