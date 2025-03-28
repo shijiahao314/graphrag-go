@@ -15,10 +15,10 @@ import (
 type KGCApi struct {
 }
 
-func (na *KGCApi) Register(rg *gin.RouterGroup) {
+func (kgcApi *KGCApi) Register(rg *gin.RouterGroup) {
 	r := rg.Group("/kgc")
 
-	r.POST("", na.KGC)
+	r.POST("", kgcApi.KGC)
 }
 
 type KGCReq struct {
@@ -34,7 +34,7 @@ type KGCRsp struct {
 	Tail     string `json:"tail"`
 }
 
-func (na *KGCApi) KGC(c *gin.Context) {
+func (kgcApi *KGCApi) KGC(c *gin.Context) {
 	req := KGCReq{}
 	rsp := KGCRsp{}
 

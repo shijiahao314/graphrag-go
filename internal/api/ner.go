@@ -43,6 +43,8 @@ func (na *NERApi) NER(c *gin.Context) {
 	}
 
 	// 调用 NER 服务
+	fmt.Println(req.Text)
+
 	result, err := callNERService(req.Text)
 	if err != nil {
 		slog.Error("call ner service error", slog.String("error", err.Error()))

@@ -41,6 +41,7 @@ func MustInitRouter() *gin.Engine {
 	routers := []IRouter{
 		&api.NERApi{},
 		&api.KGCApi{},
+		&api.KGEApi{},
 		&api.KBApi{},
 		&api.DataApi{},
 		&api.QueryApi{},
