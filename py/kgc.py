@@ -50,7 +50,7 @@ def load_model(dataset_size: Size = "small"):
 
 
 # 进行推理
-def infer_tail_entity(
+def infer_triples(
     model, dataset, head_entity_label: str, relation_label: str, tail_entity_label: str
 ):
     if head_entity_label == "":
@@ -95,5 +95,5 @@ if __name__ == "__main__":
     head = "Q999726"  # Q10800557
     relation = "P101"  # P131
     tail = "Q223117"  # Q223117
-    a, b, c = infer_tail_entity(model, dataset, head, relation, tail)
+    a, b, c = infer_triples(model, dataset, head, relation, tail)
     print(a, b, c)

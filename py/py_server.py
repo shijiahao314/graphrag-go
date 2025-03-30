@@ -13,26 +13,78 @@ HanLP = hanlp.load(
 )
 ner = HanLP["ner/msra"]
 ner.dict_tags = {
-    # 电力设备类
-    ("检查", "变压器"): ("O", "S-EQUIP"),  # B:设备开始 M:设备中间 E:设备结束 S:单字设备
-    ("更换", "断路器"): ("O", "S-EQUIP"),
-    ("绝缘", "子"): ("B-COMPONENT", "E-COMPONENT"),
-    # 电力技术术语
-    ("过", "电压", "保护"): ("B-TECH", "M-TECH", "E-TECH"),
-    ("谐波", "抑制"): ("B-TECH", "E-TECH"),
-    ("短路", "电流"): ("B-TECH", "E-TECH"),
-    # 组织机构
-    ("国家", "电网"): ("B-ORG", "E-ORG"),  # 国家电网有限公司
-    ("南方", "电网"): ("B-ORG", "E-ORG"),
-    ("华能", "集团"): ("B-ORG", "E-ORG"),
-    # 电力设施
-    ("1000", "千伏", "变电站"): ("B-FAC", "I-FAC", "E-FAC"),
-    ("输电", "线路"): ("B-FAC", "E-FAC"),
-    ("配电", "网络"): ("B-FAC", "E-FAC"),
-    # 安全操作
-    ("接地", "线"): ("B-SAFETY", "E-SAFETY"),
-    ("绝缘", "手套"): ("B-SAFETY", "E-SAFETY"),
-    ("安全", "规程"): ("B-SAFETY", "E-SAFETY"),
+    # 电力设备类 (EQUIP)
+    ("发电机",): ("S-EQUIP",),
+    ("变压器",): ("S-EQUIP",),
+    ("断路器",): ("S-EQUIP",),
+    ("逆变器",): ("S-EQUIP",),
+    ("整流器",): ("S-EQUIP",),
+    ("电容器",): ("S-EQUIP",),
+    ("智能电表",): ("S-EQUIP",),
+    ("冷却塔",): ("S-EQUIP",),
+    ("锅炉",): ("S-EQUIP",),
+    ("涡轮机",): ("S-EQUIP",),
+    # 设施类 (FAC)
+    ("发电厂",): ("S-FAC",),
+    ("变电站",): ("S-FAC",),
+    ("输电线路",): ("B-FAC", "E-FAC"),
+    ("配电线路",): ("B-FAC", "E-FAC"),
+    ("充电桩",): ("S-FAC",),
+    ("水电站",): ("S-FAC",),
+    ("核电厂",): ("S-FAC",),
+    # 技术术语 (TECH)
+    ("欧姆定律",): ("S-TECH",),
+    ("电磁感应",): ("S-TECH",),
+    ("光伏效应",): ("S-TECH",),
+    ("无功补偿",): ("S-TECH",),
+    ("功率因数",): ("S-TECH",),
+    ("特高压输电",): ("B-TECH", "E-TECH"),
+    ("柔性输电",): ("B-TECH", "E-TECH"),
+    ("电力电子",): ("B-TECH", "E-TECH"),
+    ("继电保护",): ("B-TECH", "E-TECH"),
+    # 参数指标 (PARAM)
+    ("电压",): ("S-PARAM",),
+    ("电流",): ("S-PARAM",),
+    ("电阻",): ("S-PARAM",),
+    ("频率",): ("S-PARAM",),
+    ("功率",): ("S-PARAM",),
+    ("谐波",): ("S-PARAM",),
+    # 材料类 (MAT)
+    ("铜",): ("S-MAT",),
+    ("绝缘油",): ("S-MAT",),
+    ("六氟化硫",): ("S-MAT",),
+    ("超导材料",): ("S-MAT",),
+    # 能源类型 (ENER)
+    ("电能",): ("S-ENER",),
+    ("风能",): ("S-ENER",),
+    ("水能",): ("S-ENER",),
+    ("太阳能",): ("S-ENER",),
+    ("生物质能",): ("S-ENER",),
+    # 组织机构 (ORG)
+    ("SCADA",): ("S-ORG",),
+    ("EMS",): ("S-ORG",),
+    ("DMS",): ("S-ORG",),
+    ("WAMS",): ("S-ORG",),
+    # 安全类 (SAFE)
+    ("接地保护",): ("B-SAFE", "E-SAFE"),
+    ("漏电保护",): ("B-SAFE", "E-SAFE"),
+    ("耐压试验",): ("B-SAFE", "E-SAFE"),
+    ("防污闪",): ("B-SAFE", "E-SAFE"),
+    # 操作类 (OP)
+    ("负荷预测",): ("B-OP", "E-OP"),
+    ("电力调度",): ("B-OP", "E-OP"),
+    ("削峰填谷",): ("B-OP", "E-OP"),
+    ("状态监测",): ("B-OP", "E-OP"),
+    # 故障类 (FAULT)
+    ("短路",): ("S-FAULT",),
+    ("开路",): ("S-FAULT",),
+    ("接地故障",): ("B-FAULT", "E-FAULT"),
+    ("局部放电",): ("B-FAULT", "E-FAULT"),
+    # 单位类 (UNIT)
+    ("欧姆",): ("S-UNIT",),
+    ("千伏",): ("S-UNIT",),
+    ("kW",): ("S-UNIT",),
+    ("kWh",): ("S-UNIT",),
 }
 
 
@@ -71,12 +123,12 @@ class KGCRsp(BaseRsp):
     tail: str
 
 
-from kgc import model, dataset, infer_tail_entity
+from kgc2 import model, infer_triples
 
 
 # KGC
 def KGCModel(head: str, relation: str, tail: str) -> Tuple[str, str, str]:
-    return infer_tail_entity(model, dataset, head, relation, tail)
+    return infer_triples(model, head, relation, tail)
 
 
 @app.post("/kgc", response_model=KGCRsp)
