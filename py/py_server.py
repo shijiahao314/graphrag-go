@@ -123,7 +123,7 @@ class KGCRsp(BaseRsp):
     tail: str
 
 
-from kgc2 import model, infer_triples
+from kgc import model, infer_triples, benchmark
 
 
 # KGC
@@ -135,6 +135,19 @@ def KGCModel(head: str, relation: str, tail: str) -> Tuple[str, str, str]:
 async def kgc(req: KGCReq):
     head, relation, tail = KGCModel(req.head, req.relation, req.tail)
     return KGCRsp(code=0, msg="success", head=head, relation=relation, tail=tail)
+
+
+class KGCBenchmarkRsp(BaseRsp):
+    hits_at_1: str
+    mrr: str
+
+
+@app.get("/kgc_benchmark", response_model=KGCBenchmarkRsp)
+async def kgc_benchmark():
+    hits_at_1, mrr = benchmark()
+    return KGCBenchmarkRsp(
+        code=0, msg="success", hits_at_1=str(hits_at_1), mrr=str(mrr)
+    )
 
 
 if __name__ == "__main__":

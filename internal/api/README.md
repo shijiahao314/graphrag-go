@@ -35,14 +35,21 @@ curl 'http://127.0.0.1:8081/ner' \
 ```bash
 curl -X POST localhost:8080/api/kgc \
   -H "Content-Type: application/json" \
-  -d '{"head": "Q999726", "relation": "P101", "tail": ""}'
+  -d '{"head": "输电线路", "relation": "连接", "tail": ""}'
+```
+
+### benchmark
+
+```bash
+curl -X GET localhost:8080/api/kgc/benchmark \
+  -H "Content-Type: application/json"
 ```
 
 ```bash
-curl -X POST localhost:8080/api/kgc \
-  -H "Content-Type: application/json" \
-  -d '{"head": "", "relation": "P101", "tail": "Q223117"}'
+curl -X GET localhost:8081/kgc_benchmark \
+  -H "Content-Type: application/json"
 ```
+
 
 ## kb
 
