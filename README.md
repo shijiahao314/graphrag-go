@@ -14,7 +14,7 @@ conda create -n graphrag-go python=3.12 -y
 conda activate graphrag-go
 pip install graphrag==0.5.0
 pip install ollama
-# python ner server
+# python server: ner, kgc, kge
 pip install hanlp fastapi uvicorn
 pip install pykeen wandb
 ```
