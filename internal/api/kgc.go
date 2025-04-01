@@ -64,7 +64,7 @@ func (kgcApi *KGCApi) KGC(c *gin.Context) {
 }
 
 func callKGCService(head, relation, tail string) (*KGCRsp, error) {
-	url := fmt.Sprintf("http://%s:%d/kgc", global.Host, global.PythonServerPort)
+	url := fmt.Sprintf("http://127.0.0.1:%d/kgc", global.PythonServerPort)
 
 	// 构造请求体
 	reqBody, err := json.Marshal(KGCReq{Head: head, Relation: relation, Tail: tail})

@@ -58,7 +58,7 @@ func MustInitPythonServer() {
 	nerServer := fmt.Sprintf("%s/%s", global.WorkDir, "/py/py_server.py")
 
 	cmd := exec.Command(global.PythonPath, nerServer,
-		"--host", global.Host,
+		"--host", "127.0.0.1",
 		"--port", fmt.Sprint(global.PythonServerPort))
 	if err := cmd.Start(); err != nil {
 		slog.Error("failed to run ner_server",

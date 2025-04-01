@@ -61,7 +61,7 @@ func (na *NERApi) NER(c *gin.Context) {
 }
 
 func callNERService(text string) (*NERRsp, error) {
-	url := fmt.Sprintf("http://%s:%d/ner", global.Host, global.PythonServerPort)
+	url := fmt.Sprintf("http://127.0.0.1:%d/ner", global.PythonServerPort)
 
 	// 构造请求体
 	reqBody, err := json.Marshal(NERReq{Text: text})

@@ -16,13 +16,13 @@ const (
 
 func init() {
 	// Host
-	global.Host = "127.0.0.1"
+	global.Host = "0.0.0.0"
 
 	// Port
-	global.Port = 8080
+	global.Port = 8088
 
 	// PythonServerPort
-	global.PythonServerPort = 8081
+	global.PythonServerPort = 8089
 
 	// WorkDir
 	dir, err := os.Getwd()
