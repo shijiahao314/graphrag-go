@@ -131,7 +131,7 @@ func (kgcApi *KGCApi) KGCBenckmark(c *gin.Context) {
 }
 
 func callKGCBenckmarkService() (*KGCBenckmarkRsp, error) {
-	url := fmt.Sprintf("http://%s:%d/kgc_benchmark", global.Host, global.PythonServerPort)
+	url := fmt.Sprintf("http://127.0.0.1:%d/kgc_benchmark", global.PythonServerPort)
 
 	// 创建 HTTP 请求
 	req, err := http.NewRequest("GET", url, nil)
