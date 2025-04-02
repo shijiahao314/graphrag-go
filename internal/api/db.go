@@ -41,8 +41,8 @@ func (da *DataApi) DeleteData(c *gin.Context) {
 	}
 
 	// 判断文件夹是否存在
-	path := fmt.Sprintf("%s/%s/%s/output/%s",
-		global.WorkDir, global.KBDir, req.KB, req.Name)
+	path := fmt.Sprintf("%s/%s/%s/output",
+		global.WorkDir, global.KBDir, req.KB)
 	_, err := os.Stat(path)
 	if err != nil {
 		// 不存在
@@ -66,21 +66,7 @@ func (da *DataApi) DeleteData(c *gin.Context) {
 
 // ReadData 获取所有 Data
 func ReadData(kb string) ([]string, error) {
-	path := fmt.Sprintf("%s/%s/%s/output", global.WorkDir, global.KBDir, kb)
-
-	files, err := os.ReadDir(path)
-	if err != nil {
-		return nil, err
-	}
-
-	kbs := []string{}
-	for _, file := range files {
-		if file.Type().IsDir() {
-			kbs = append(kbs, file.Name())
-		}
-	}
-
-	return kbs, nil
+	return []string{"output"}, nil
 }
 
 // GetData 获取可用 Data
@@ -119,8 +105,8 @@ func (da *DataApi) GetData(c *gin.Context) {
 
 // ReadOutput 获取所有 Output
 func ReadOutput(kb, db string) ([]string, error) {
-	path := fmt.Sprintf("%s/%s/%s/output/%s/artifacts",
-		global.WorkDir, global.KBDir, kb, db)
+	path := fmt.Sprintf("%s/%s/%s/output",
+		global.WorkDir, global.KBDir, kb)
 
 	files, err := os.ReadDir(path)
 	if err != nil {
@@ -176,8 +162,8 @@ func (da *DataApi) GetOutput(c *gin.Context) {
 // ReadLogs 获取日志文件内容
 func ReadLogs(kb, db string) ([]byte, error) {
 	filename := "indexing-engine.log"
-	logFilePath := fmt.Sprintf("%s/%s/%s/output/%s/reports/%s",
-		global.WorkDir, global.KBDir, kb, db, filename)
+	logFilePath := fmt.Sprintf("%s/%s/%s/logs/%s",
+		global.WorkDir, global.KBDir, kb, filename)
 
 	files, err := os.ReadFile(logFilePath)
 	if err != nil {

@@ -12,11 +12,14 @@
 # conda env remove -n graphrag-go
 conda create -n graphrag-go python=3.12 -y
 conda activate graphrag-go
-pip install graphrag==0.5.0
+pip install graphrag
 pip install ollama
 # python server: ner, kgc, kge
 pip install hanlp fastapi uvicorn
 pip install pykeen wandb
+
+# utils
+pip install PyPDF2 python-docx
 ```
 
 ## 2.修改本地 conda 环境 graphrrag 包源代码

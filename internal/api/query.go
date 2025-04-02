@@ -50,22 +50,13 @@ func (qa *QueryApi) Query(c *gin.Context) {
 	}
 
 	path := fmt.Sprintf("%s/%s/%s", global.WorkDir, global.KBDir, req.KB)
-	config := fmt.Sprintf("%s/settings.yaml", path)
-	data := fmt.Sprintf("%s/output/%s", path, req.DB)
-
-	// mock reply
-	// rsp.Code = 0
-	// rsp.Msg = "success"
-	// rsp.Text = "I'm sorry, but I don't have any data tables to ass…ables so that I can generate a helpful response.\n"
-	// c.JSON(http.StatusOK, rsp)
-	// return
+	query := strings.Replace(req.Text, "\n", "\\n", -1)
 
 	cmd := exec.CommandContext(c, global.PythonPath,
 		"-m", "graphrag", "query",
+		"--root", path,
 		"--method", string(req.Method),
-		"--query", req.Text,
-		"--config", config,
-		"--data", data,
+		"--query", query, // 使用转义后的查询文本
 		"--response-type", "Single Paragraph",
 	)
 
