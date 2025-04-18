@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,8 @@ func (ka *KBApi) Register(rg *gin.RouterGroup) {
 	r.POST("/add", ka.AddKB)
 	r.POST("/delete", ka.DeleteKB)
 	r.POST("/indexing", ka.IndexKB)
+	r.POST("/file/upload", ka.UploadFile)
+	r.POST("/file/delete", ka.DeleteFile)
 }
 
 // AddKB 新建知识库
@@ -301,5 +304,93 @@ func (da *KBApi) GetInput(c *gin.Context) {
 	rsp.Code = 0
 	rsp.Msg = "success"
 	rsp.Files = files
+	c.JSON(http.StatusOK, rsp)
+}
+
+// UploadFile 文件上传
+func (da *KBApi) UploadFile(c *gin.Context) {
+	type UploadFileRsp struct {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+	}
+
+	// 这里不再使用 ShouldBindJSON，因为我们需要接收的是 multipart/form-data 类型的数据
+	kb := c.DefaultPostForm("kb", "") // 获取表单字段 "kb"（默认值为空字符串）
+
+	// 获取上传的文件
+	file, err := c.FormFile("file")
+	if err != nil {
+		rsp := UploadFileRsp{
+			Code: -1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, rsp)
+		return
+	}
+
+	// 确定文件保存路径
+	path := fmt.Sprintf("%s/%s/%s/input", global.WorkDir, global.KBDir, kb)
+	dst := filepath.Join(path, file.Filename)
+
+	// 创建文件目录（如果不存在）
+	if err := os.MkdirAll(path, os.ModePerm); err != nil {
+		rsp := UploadFileRsp{
+			Code: -1,
+			Msg:  "创建目录失败: " + err.Error(),
+		}
+		c.JSON(http.StatusInternalServerError, rsp)
+		return
+	}
+
+	// 保存文件到本地
+	if err := c.SaveUploadedFile(file, dst); err != nil {
+		rsp := UploadFileRsp{
+			Code: -1,
+			Msg:  err.Error(),
+		}
+		c.JSON(http.StatusInternalServerError, rsp)
+		return
+	}
+
+	// 返回成功响应
+	rsp := UploadFileRsp{
+		Code: 0,
+		Msg:  "文件上传成功",
+	}
+	c.JSON(http.StatusOK, rsp)
+}
+
+// 删除文件
+func (da *KBApi) DeleteFile(c *gin.Context) {
+	type DeleteFileReq struct {
+		KB    string   `json:"kb"`
+		Files []string `json:"files"`
+	}
+	type DeleteFileRsp struct {
+		BaseRsp
+	}
+
+	req := DeleteFileReq{}
+	rsp := DeleteFileRsp{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		rsp.Code = -1
+		rsp.Msg = err.Error()
+		c.JSON(http.StatusBadRequest, rsp)
+		return
+	}
+
+	for _, file := range req.Files {
+		path := fmt.Sprintf("%s/%s/%s/input/%s", global.WorkDir, global.KBDir, req.KB, file)
+		err := os.Remove(path)
+		if err != nil {
+			rsp.Code = -1
+			rsp.Msg = err.Error()
+			c.JSON(http.StatusInternalServerError, rsp)
+			return
+		}
+	}
+
+	rsp.Code = 0
+	rsp.Msg = "success"
 	c.JSON(http.StatusOK, rsp)
 }
