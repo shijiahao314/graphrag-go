@@ -15,7 +15,7 @@ from pykeen.pipeline import pipeline
 from pykeen.trackers import PythonResultTracker
 
 # 检查GPU可用性
-device = "cuda:4" if torch.cuda.is_available() else "cpu"
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
 
